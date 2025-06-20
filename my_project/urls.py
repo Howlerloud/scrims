@@ -21,7 +21,7 @@ from about import views as about_views
 
 
 urlpatterns = [
-    path('hello/', index_views.index, name='index'),
+    path('', index_views.index, name='index'),
     path('admin/', admin.site.urls),
     path('hello/about/', about_views.about_me, name='about'),
 ]
