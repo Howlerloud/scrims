@@ -17,13 +17,27 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     excerpt = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ["-created_on"]
+
 
 ACTIVE = ((0, "Playing"), (1, "Sub"))
 
 
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="commenter")
+    body = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
 # Create your models here.
 class Userstat(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    player = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="The_Users_name")
     RANK = [
         ('bronze', 'Bronze'),
         ('silver', 'Silver'),
@@ -46,5 +60,3 @@ class Userstat(models.Model):
     role = models.CharField(max_length=30, choices=ROLE, default='dps')
     created_on = models.DateTimeField(auto_now_add=True)
     teamstatus = models.IntegerField(choices=ACTIVE, default=1)
-
-
