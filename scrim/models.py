@@ -22,8 +22,8 @@ ACTIVE = ((0, "Playing"), (1, "Sub"))
 
 
 # Create your models here.
-class Usercreate(models.Model):
-    Username = models.TextField(max_length=30, unique=True)
+class Userstat(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     RANK = [
         ('bronze', 'Bronze'),
         ('silver', 'Silver'),
@@ -37,11 +37,13 @@ class Usercreate(models.Model):
 
     rank = models.CharField(max_length=200, choices=RANK, default='Bronze')
 
-    role = [
+    ROLE = [
         ('dps', 'DPS'),
         ('support', 'Support'),
         ('tank', 'Tank'),
     ]
+
+    role = models.CharField(max_length=30, choices=ROLE, default='dps')
     created_on = models.DateTimeField(auto_now_add=True)
     teamstatus = models.IntegerField(choices=ACTIVE, default=1)
 

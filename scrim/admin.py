@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Post
-from .models import Usercreate
+from .models import Post, Userstat
+
 
 # Register your models here.
 
@@ -8,4 +8,4 @@ from .models import Usercreate
 admin.site.register(Post)
 
 
-admin.site.register(Usercreate)
+admin.site.register(Userstat)
