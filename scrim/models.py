@@ -40,9 +40,10 @@ class Comment(models.Model):
         ordering = ["-created_on"]
 
     def __str__(self):
-        return self.body[:20], f"by {self.author}" 
-    
-    
+        comment_start = self.body
+        if len(comment_start) > 15:
+            comment_start = comment_start[:15] + "..."
+        return f"{comment_start} by {self.author}"
 
 
 # Create your models here.
