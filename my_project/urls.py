@@ -16,12 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from scrim import views as index_views
-from about import views as about_views
 
 
 urlpatterns = [
-    path('', index_views.index, name='index'),
+    path("", include("scrim.urls"), name="scrim-urls"),
     path('admin/', admin.site.urls),
-    path('hello/about/', about_views.about_me, name='about'),
 ]
