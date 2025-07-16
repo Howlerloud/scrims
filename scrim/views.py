@@ -20,16 +20,16 @@ class LfgView(TemplateView):
 
 def post_detail(request, slug):
     """
-    Display an individual :model:`blog.Post`.
+    Display an individual :model:`pages.Post`.
 
     **Context**
 
     ``post``
-        An instance of :model:`blog.Post`.
+        An instance of :model:`pages.Post`.
 
     **Template:**
 
-    :template:`blog/post_detail.html`
+    :template:`pages/post_detail.html`
     """
 
     queryset = Post.objects.filter(status=1)
@@ -37,6 +37,6 @@ def post_detail(request, slug):
 
     return render(
         request,
-        "blog/post_detail.html",
+        "pages/post_detail.html",
         {"post": post},
     )
