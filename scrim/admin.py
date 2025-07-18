@@ -6,13 +6,18 @@ from django_summernote.admin import SummernoteModelAdmin
 class PostAdmin(SummernoteModelAdmin):
 
     list_display = ('title', 'slug', 'status', 'created_on')
-    search_fields = ['title' 'content']
+    search_fields = ['title', 'content']
     list_filter = ('status', 'created_on')
     prepopulated_fields = {'slug': ('title',)}
     summernote_fields = ('content',)
 
-# Register your models here.
+
+@admin.register(Userstat)
+class UserstatAdmin(SummernoteModelAdmin):
+
+    list_display = ('player', 'role', 'created_on','team_status')
+    search_fields = ['player', 'role']
+    list_filter = ('team_status',)
 
 
 admin.site.register(Comment)
-admin.site.register(Userstat)

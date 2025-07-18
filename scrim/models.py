@@ -25,9 +25,6 @@ class Post(models.Model):
         return f"The title of this post is {self.title}"
 
 
-ACTIVE = ((0, "Playing"), (1, "Sub"))
-
-
 class Comment(models.Model):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="comments")
@@ -48,6 +45,9 @@ class Comment(models.Model):
 
 
 # Create your models here.
+ACTIVE = ((0, "Playing"), (1, "Sub"))
+
+
 class Userstat(models.Model):
     player = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="The_Users_name")
@@ -58,7 +58,7 @@ class Userstat(models.Model):
         ('platinum', 'Platinum'),
         ('diamond', 'Diamond'),
         ('grandmaster', 'Grandmaster'),
-        ('clestial', 'Celestial'),
+        ('celestial', 'Celestial'),
         ('eternity', 'Eternity'),
     ]
 
@@ -72,4 +72,10 @@ class Userstat(models.Model):
 
     role = models.CharField(max_length=30, choices=ROLE, default='dps')
     created_on = models.DateTimeField(auto_now_add=True)
-    teamstatus = models.IntegerField(choices=ACTIVE, default=1)
+    team_status = models.IntegerField(choices=ACTIVE, default=1)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return f"User: {self.player}"
