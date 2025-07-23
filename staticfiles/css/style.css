@@ -159,3 +159,36 @@ body {
 .approval {
     color: rgb(222, 146, 168);
 }
+
+.log-box {
+    border-style: solid;
+    border-color: #4A4A4F;
+    background-color: #4A4A4F;
+}
+
+html {
+    color: rgb(255, 255, 255);
+    background: linear-gradient(to right, black 0%, rgb(92, 90, 90) 25%, rgb(92, 90, 90) 25%, rgb(92, 90, 90) 75%, rgb(92, 90, 90) 75%, black 100%);
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: transparent;
+}
+
+.dark {
+    background-color: #212529;
+}
+
+.web-body {
+    text-align: center;
+    width: 50%;
+    height: auto;
+    background-color: grey ;
+    border-color: grey;
+    border-style: solid;
+    border-radius: 1rem;
+    margin: auto;
+    margin-top: 2rem;
+}
