@@ -22,10 +22,15 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  {% if user.is_authenticated %}
+  <p class="user-structure">{{ user }}</p>
+  {% else %}
   <a class="navbar-brand" href="{% url 'home' %}">Scrim master</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+  {% endif %}
+  
 <!-- Bootstrap dropdown navbar -->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
@@ -51,11 +56,6 @@
 </nav>
 
  <main class="flex-shrink-0 main-bg">
-    {% if user.is_authenticated %}
-        <p class="text-end m-3">You are logged in as {{ user }}</p>
-    {% else %}
-        <p class="text-end m-3">You are not logged in </p>
-    {% endif %}
     {% block content %}
     {% endblock content %}
 </main>
