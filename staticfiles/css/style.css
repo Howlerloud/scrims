@@ -1,14 +1,22 @@
-.log-box {
-    border-style: solid;
-    border-color: #4A4A4F;
-    background-color: #4A4A4F;
-}
-
 html {
-    color: rgb(172, 25, 25);
+    color: #212529 ;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
+}
+
+body {
+    color: #212529 ;
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.log-box {
+    border-style: solid;
+    border-color: #212529;
+    background-color: #a2a2a8;
 }
 
 .dark {
@@ -29,4 +37,35 @@ html {
 
 .user-structure {
     color: white;
+    padding: .5rem;
+    margin-bottom: 0;
 }
+
+.sign-margin {
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+a {
+  color: inherit;         /* To remove the standard link css */
+  text-decoration: none;
+}
+
+.signup-link:hover {
+    color: white ;
+    text-decoration: none;
+    outline: none;
+}
+
+.signup-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+}
+
+
