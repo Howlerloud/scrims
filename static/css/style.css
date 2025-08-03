@@ -6,7 +6,7 @@ html {
 }
 
 body {
-    color: #ffffff ;
+    color: #212529; ;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
@@ -68,4 +68,30 @@ a {
     outline: none;
 }
 
+.zone {
+    color: #212529;
+}
 
+.gap {
+    margin: .5rem;
+}
+
+/* centers the whole table on the main page */
+.userstat-table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.userstat-table th,
+.userstat-table td {
+    width: 20%;
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    text-align: left;
+}

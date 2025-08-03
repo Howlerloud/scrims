@@ -2,40 +2,27 @@
 {% load static %}
 {% block content %}
 <!-- index.html content starts here -->
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- Blog Entries Column -->
-        <div class="col-12 mt-3 left">
-            <div class="row">
-                {% for post in post_list %}
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="image-container">
-                                <div class="image-flash">
-                                    <p class="author">Author: {{ post.author }}</p>
-                                </div>
-                            </div>
-                            <a href="{% url 'post_detail' post.slug %}" class="post-link">
-                                <h2 class="card-title">{{ post.title }}</h2>
-                            </a>
-                            <p class="card-text ">{{ post.excerpt }}</p>
-                            <hr />
-                            <p class="card-text text-muted h6">{{ post.created_on}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                {% if forloop.counter|divisibleby:3 %}
-            </div>
-            <div class="row">
-                {% endif %}
-                {% endfor %}
-
-            </div>
-        </div>
-    </div>
+<table class="userstat-table">
+    <thead>
+        <tr>
+            <th>Host</th>
+            <th>Team</th>
+            <th>Rank</th>
+            <th>Date</th>
+            </tr>
+    </thead>
+        {% for userstat in userstat_list %}
+            <tbody>
+                <tr>
+                    <td>{{ userstat.player }}</td>
+                    <td>{{ userstat.team_name }}</td>
+                    <td>{{ userstat.rank }}</td>
+                    <td>{{ userstat.created_on|date:"M d \a\\t g:i A" }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        {% endfor %}
+</table>
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">

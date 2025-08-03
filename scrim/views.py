@@ -1,13 +1,19 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from .models import Post
+from .models import Post, Userstat
 from django.views.generic import TemplateView
 
 
-class PostList(generic.ListView):
-    queryset = Post.objects.all()
+# class PostList(generic.ListView):
+#     queryset = Post.objects.all()
+#     template_name = "pages/index.html"
+#     paginate_by = 6
+
+
+class UserList(generic.ListView):
+    queryset = Userstat.objects.all()
     template_name = "pages/index.html"
-    paginate_by = 6
+    paginate_by = 10
 
 
 class FindView(TemplateView):
@@ -17,26 +23,35 @@ class FindView(TemplateView):
 class LfgView(TemplateView):
     template_name = "pages/lfg.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        team_slug = self.kwargs.get('team_slug')
 
-def post_detail(request, slug):
-    """
-    Display an individual :model:`pages.Post`.
+        userstat = get_object_or_404(Userstat, team_slug=team_slug)
+        context['userstat'] = userstat
 
-    **Context**
+        return context
 
-    ``post``
-        An instance of :model:`pages.Post`.
 
-    **Template:**
+# def post_detail(request, slug):
+#     """
+#     Display an individual :model:`pages.Post`.
 
-    :template:`pages/post_detail.html`
-    """
+#     **Context**
 
-    queryset = Post.objects.filter(status=1)
-    post = get_object_or_404(queryset, slug=slug)
+#     ``post``
+#         An instance of :model:`pages.Post`.
 
-    return render(
-        request,
-        "pages/post_detail.html",
-        {"post": post},
-    )
+#     **Template:**
+
+#     :template:`pages/post_detail.html`
+#     """
+
+#     queryset = Post.objects.filter(status=1)
+#     post = get_object_or_404(queryset, slug=slug)
+
+#     return render(
+#         request,
+#         "pages/post_detail.html",
+#         {"post": post},
+#     )

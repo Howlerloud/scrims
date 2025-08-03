@@ -70,6 +70,7 @@ class Userstat(models.Model):
         ('tank', 'Tank'),
     ]
 
+    team_name = models.CharField(max_length=30)
     role = models.CharField(max_length=30, choices=ROLE, default='dps')
     created_on = models.DateTimeField(auto_now_add=True)
     team_status = models.IntegerField(choices=ACTIVE, default=1)
