@@ -1,0 +1,25 @@
+{% extends 'structure.html' %}
+{% load static %}
+
+{% block content %}
+  <h2>Create a New Team</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+  </form>
+
+  {% if success is not None %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+          icon: '{% if success %}success{% else %}error{% endif %}',
+          title: '{% if success %}Team created successfully!{% else %}Failed to create team.{% endif %}',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      });
+    </script>
+  {% endif %}
+{% endblock %}

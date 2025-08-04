@@ -1,13 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
-from .models import Post, Userstat
+from .models import Userstat, Sixteam
 from django.views.generic import TemplateView
-
-
-# class PostList(generic.ListView):
-#     queryset = Post.objects.all()
-#     template_name = "pages/index.html"
-#     paginate_by = 6
+from django.contrib.auth.decorators import login_required
+from .forms import SixteamForm
 
 
 class UserList(generic.ListView):
@@ -30,25 +26,20 @@ class LfgView(TemplateView):
         return context
 
 
-# def post_detail(request, slug):
-#     """
-#     Display an individual :model:`pages.Post`.
+@login_required
+def create_team(request):
+    success = None
 
-#     **Context**
+    if request.method == 'POST':
+        form = SixteamForm(request.POST)
+        if form.is_valid():
+            team = form.save(commit=False)
+            team.creator = request.user  # 👈 THIS IS CRUCIAL
+            team.save()
+            success = True
+        else:
+            success = False
+    else:
+        form = SixteamForm()
 
-#     ``post``
-#         An instance of :model:`pages.Post`.
-
-#     **Template:**
-
-#     :template:`pages/post_detail.html`
-#     """
-
-#     queryset = Post.objects.filter(status=1)
-#     post = get_object_or_404(queryset, slug=slug)
-
-#     return render(
-#         request,
-#         "pages/post_detail.html",
-#         {"post": post},
-#     )
+    return render(request, 'pages/create_team.html', {'form': form, 'success': success})

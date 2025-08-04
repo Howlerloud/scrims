@@ -1,15 +1,13 @@
 from django.contrib import admin
-from .models import Post, Userstat, Comment
+from .models import Sixteam
+from .models import Userstat
 from django_summernote.admin import SummernoteModelAdmin
 
-@admin.register(Post)
-class PostAdmin(SummernoteModelAdmin):
-
-    list_display = ('title', 'slug', 'status', 'created_on')
-    search_fields = ['title', 'content']
-    list_filter = ('status', 'created_on')
-    prepopulated_fields = {'slug': ('title',)}
-    summernote_fields = ('content',)
+@admin.register(Sixteam)
+class SixteamAdmin(admin.ModelAdmin):
+    list_display = ('name', 'creator', 'created_on', 'slug')
+    search_fields = ('name', 'creator__username')
+    prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(Userstat)
@@ -20,4 +18,4 @@ class UserstatAdmin(SummernoteModelAdmin):
     list_filter = ('team_status',)
 
 
-admin.site.register(Comment)
+

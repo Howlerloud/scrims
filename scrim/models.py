@@ -3,50 +3,22 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 
-STATUS = ((0, "Draft"), (1, "Published"))
-
-
-# Create your models here.
-class Post(models.Model):
-    title = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=200, unique=True)
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="blog_posts"
-    )
-    content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(choices=STATUS, default=0)
-    excerpt = models.TextField(blank=True)
-
-    class Meta:
-        ordering = ["created_on"]
-
-    def __str__(self):
-        return f"The title of this post is {self.title}"
-
-
-class Comment(models.Model):
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="commenter")
-    body = models.TextField()
-    approved = models.BooleanField(default=False)
-    created_on = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["-created_on"]
-
-    def __str__(self):
-        comment_start = self.body
-        if len(comment_start) > 15:
-            comment_start = comment_start[:15] + "..."
-        return f"{comment_start} by {self.author}"
-
-
-# Create your models here.
 ACTIVE = ((0, "Playing"), (1, "Sub"))
+
+
+class Sixteam(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_teams')
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class Userstat(models.Model):
@@ -71,7 +43,11 @@ class Userstat(models.Model):
         ('tank', 'Tank'),
     ]
 
-    team_name = models.CharField(max_length=30)
+    six_team = models.ForeignKey(
+        'Sixteam', on_delete=models.SET_NULL, null=True, blank=True, related_name="userstats"
+    )
+
+    team_name = models.CharField(max_length=30, default="teamless!")
     slug = models.SlugField(max_length=30, unique=True, blank=True)
     role = models.CharField(max_length=30, choices=ROLE, default='dps')
     created_on = models.DateTimeField(auto_now_add=True)
@@ -81,9 +57,22 @@ class Userstat(models.Model):
         ordering = ["created_on"]
 
     def __str__(self):
-        return f"User: {self.player}"
+        return f"Userstat for {self.player.username}"
 
     def save(self, *args, **kwargs):
+        if self.six_team:
+            self.team_name = self.six_team.name
+        elif not self.team_name:
+            self.team_name = "teamless"
+
         if not self.slug:
             self.slug = slugify(self.team_name)
+
         super().save(*args, **kwargs)
+
+
+class TeamMembership(models.Model):
+    team = models.ForeignKey('Sixteam', on_delete=models.CASCADE, related_name="memberships")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="team_memberships")
+    approved = models.BooleanField(default=False)
+    requested_at = models.DateTimeField(auto_now_add=True)
