@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 STATUS = ((0, "Draft"), (1, "Published"))
@@ -71,6 +72,7 @@ class Userstat(models.Model):
     ]
 
     team_name = models.CharField(max_length=30)
+    slug = models.SlugField(max_length=30, unique=True, blank=True)
     role = models.CharField(max_length=30, choices=ROLE, default='dps')
     created_on = models.DateTimeField(auto_now_add=True)
     team_status = models.IntegerField(choices=ACTIVE, default=1)
@@ -80,3 +82,8 @@ class Userstat(models.Model):
 
     def __str__(self):
         return f"User: {self.player}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.team_name)
+        super().save(*args, **kwargs)

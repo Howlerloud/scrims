@@ -18,7 +18,10 @@
                     <td>{{ userstat.team_name }}</td>
                     <td>{{ userstat.rank }}</td>
                     <td>{{ userstat.created_on|date:"M d \a\\t g:i A" }}</td>
-                    <td></td>
+                    <td>
+                        <a href="{% url 'lfg_detail' slug=userstat.slug %}" class="post-link">
+                            <h2 class="card-title">View Match</h2>
+                        </a></td>
                 </tr>
             </tbody>
         {% endfor %}

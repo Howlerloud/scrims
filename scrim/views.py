@@ -16,20 +16,17 @@ class UserList(generic.ListView):
     paginate_by = 10
 
 
-class FindView(TemplateView):
-    template_name = "pages/find.html"
-
-
 class LfgView(TemplateView):
     template_name = "pages/lfg.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        team_slug = self.kwargs.get('team_slug')
 
-        userstat = get_object_or_404(Userstat, team_slug=team_slug)
+        # Use the correct kwarg name and model field
+        slug = self.kwargs.get('slug')
+        userstat = get_object_or_404(Userstat, slug=slug)
+
         context['userstat'] = userstat
-
         return context
 
 
