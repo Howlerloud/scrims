@@ -25,12 +25,19 @@ class UserList(generic.ListView):
 
         form = LFPForm(request.POST, user=request.user)
         if form.is_valid():
+            six_team = form.cleaned_data['six_team']
+
+            # Check if this team already has a Userstat post
+            if Userstat.objects.filter(six_team=six_team).exists():
+                return redirect('/?lfp_error=1')
+
             userstat = form.save(commit=False)
             userstat.player = request.user
             userstat.save()
             return redirect('/?lfp_success=1')
-        else:
-            return self.get(request, form=form)
+
+        return self.get(request, form=form)
+
 
 class LfgView(TemplateView):
     template_name = "pages/lfg.html"
@@ -44,6 +51,18 @@ class LfgView(TemplateView):
         context['userstat'] = userstat
         return context
 
+@login_required
+def delete_lfp(request, slug):
+    userstat = get_object_or_404(Userstat, slug=slug)
+
+    if request.user != userstat.player:
+        return HttpResponseForbidden("You can't delete this post.")
+
+    if request.method == 'POST':
+        userstat.delete()
+        return redirect('/?lfp_deleted=1')
+
+    return redirect('/')  # fallback
 
 @login_required
 def user_teams(request):
