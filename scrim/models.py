@@ -12,6 +12,8 @@ class Sixteam(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_teams')
     created_on = models.DateTimeField(auto_now_add=True)
 
+    is_lfp = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)

@@ -22,41 +22,45 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  {% if user.is_authenticated %}
-  <p class="user-structure">{{ user }}</p>
-  {% else %}
   <a class="navbar-brand" href="{% url 'home' %}">Scrim master</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  {% endif %}
-  
-<!-- Bootstrap dropdown navbar -->
+
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!-- LEFT SIDE LINKS -->
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
       </li>
 
-  {% if user.is_authenticated %}
-    <li class="nav-item active">
-      <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
-    </li>
-    <a href="{% url 'create_team' %}" class="post-link">
-      <p class="user-structure">Create Team</p>
-    </a>
-    <a href="{% url 'my_teams' %}">
-      <p class="user-structure">Teams</p>
-    </a>
-  {% else %}
-    <li class="nav-item active">
-      <a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
-      href="{% url 'account_signup' %}">Register</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page" href="{% url 'account_login' %}">Login</a>
-    </li>
-    {% endif %}
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_team' %}">Create Team</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'my_teams' %}">My Teams</a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == logout_url %}active{% endif %}"
+             href="{% url 'account_logout' %}">Logout</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == signup_url %}active{% endif %}"
+             href="{% url 'account_signup' %}">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == login_url %}active{% endif %}"
+             href="{% url 'account_login' %}">Login</a>
+        </li>
+      {% endif %}
     </ul>
   </div>
 </nav>
@@ -65,11 +69,6 @@
     {% block content %}
     {% endblock content %}
 </main>
-
-  <!-- <div class="web-body">
-    <p>Fill</p>
-  </div> -->
-
 </body>
 <!-- Script source for bootstrap js-->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

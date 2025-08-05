@@ -1,0 +1,24 @@
+{% extends "structure.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Mark One of Your Teams as LFP</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Post to Index</button>
+</form>
+
+{% if success %}
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'LFP post created!',
+        showConfirmButton: false,
+        timer: 2000
+    });
+</script>
+{% endif %}
+
+{% endblock %}

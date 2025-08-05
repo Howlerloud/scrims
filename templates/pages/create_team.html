@@ -15,7 +15,7 @@
       document.addEventListener('DOMContentLoaded', function () {
         Swal.fire({
           icon: '{% if success %}success{% else %}error{% endif %}',
-          title: '{% if success %}Team created successfully!{% else %}Failed to create team.{% endif %}',
+          title: '{% if success %}Team created successfully!{% else %}This team all-ready exists.{% endif %}',
           showConfirmButton: false,
           timer: 2000
         });
