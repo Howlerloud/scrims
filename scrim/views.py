@@ -18,12 +18,17 @@ class LfgView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Use the correct kwarg name and model field
         slug = self.kwargs.get('slug')
         userstat = get_object_or_404(Userstat, slug=slug)
 
         context['userstat'] = userstat
         return context
+
+
+@login_required
+def user_teams(request):
+    teams = Sixteam.objects.filter(creator=request.user)
+    return render(request, 'pages/my_teams.html', {'teams': teams})
 
 
 @login_required
@@ -34,12 +39,27 @@ def create_team(request):
         form = SixteamForm(request.POST)
         if form.is_valid():
             team = form.save(commit=False)
-            team.creator = request.user  # 👈 THIS IS CRUCIAL
+            team.creator = request.user  
             team.save()
             success = True
+            return redirect('my_teams')  # redirect to your list of teams
         else:
             success = False
     else:
         form = SixteamForm()
 
     return render(request, 'pages/create_team.html', {'form': form, 'success': success})
+
+
+@login_required
+def delete_team(request, slug):
+    team = get_object_or_404(Sixteam, slug=slug)
+
+    if request.user != team.creator:
+        return HttpResponseForbidden("This is not your team to delete!.") #stops users entering other teams urls and deleting them
+
+    if request.method == 'POST':
+        team.delete()
+        return redirect('my_teams')  # redirect to your list of teams
+
+    return render(request, 'pages/confirm_delete.html', {'team': team})

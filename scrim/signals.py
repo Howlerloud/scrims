@@ -8,7 +8,7 @@ def update_userstat_on_approval(sender, instance, created, **kwargs):
     if instance.approved:
         try:
             userstat = Userstat.objects.get(player=instance.user)
-            userstat.six_team = instance.team  # ✅ use `six_team` now
+            userstat.six_team = instance.team 
             userstat.team_name = instance.team.name
             userstat.save()
         except Userstat.DoesNotExist:
@@ -18,7 +18,6 @@ def update_userstat_on_approval(sender, instance, created, **kwargs):
                 team_name=instance.team.name
             )
     elif not instance.approved:
-        # If unapproved, clear the link
         try:
             userstat = Userstat.objects.get(player=instance.user)
             userstat.six_team = None

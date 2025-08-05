@@ -40,8 +40,14 @@
 
   {% if user.is_authenticated %}
     <li class="nav-item active">
-    <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
+      <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
     </li>
+    <a href="{% url 'create_team' %}" class="post-link">
+      <p class="user-structure">Create Team</p>
+    </a>
+    <a href="{% url 'my_teams' %}">
+      <p class="user-structure">Teams</p>
+    </a>
   {% else %}
     <li class="nav-item active">
       <a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
