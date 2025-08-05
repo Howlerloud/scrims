@@ -2,6 +2,22 @@
 {% load static %}
 {% block content %}
 <!-- index.html content starts here -->
+ {% if user.is_authenticated %}
+  <form method="POST" class="lfp-form">
+    {% csrf_token %}
+    <label for="id_six_team">Your Team:</label>
+    {{ lfp_form.six_team }}
+
+    <label for="id_rank">Rank:</label>
+    {{ lfp_form.rank }}
+
+    <label for="id_role">Role:</label>
+    {{ lfp_form.role }}
+
+    <button type="submit">Post LFP</button>
+  </form>
+{% endif %}
+
 <table class="userstat-table">
     <thead>
         <tr>
@@ -39,6 +55,18 @@
     </nav>
     {% endif %}
 </div>
-
+{% if request.GET.lfp_success %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      Swal.fire({
+        icon: 'success',
+        title: 'LFP posted successfully!',
+        showConfirmButton: false,
+        timer: 2000
+      });
+    });
+  </script>
+{% endif %}
 <!-- index.html content ends here -->
 {% endblock %}

@@ -7,12 +7,22 @@ ACTIVE = ((0, "Playing"), (1, "Sub"))
 
 
 class Sixteam(models.Model):
+    RANK = [
+        ('bronze', 'Bronze'),
+        ('silver', 'Silver'),
+        ('gold', 'Gold'),
+        ('platinum', 'Platinum'),
+        ('diamond', 'Diamond'),
+        ('grandmaster', 'Grandmaster'),
+        ('celestial', 'Celestial'),
+        ('eternity', 'Eternity'),
+    ]
+    
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_teams')
     created_on = models.DateTimeField(auto_now_add=True)
-
-    is_lfp = models.BooleanField(default=False)
+    average_rank = models.CharField(max_length=200, choices=RANK, default='Bronze')
 
     def save(self, *args, **kwargs):
         if not self.slug:

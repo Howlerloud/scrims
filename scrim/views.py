@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponseForbidden
-from .forms import SixteamForm
+from .forms import SixteamForm, LFPForm
 from .models import Userstat, Sixteam
 
 
@@ -12,7 +12,25 @@ class UserList(generic.ListView):
     queryset = Userstat.objects.all()
     template_name = "pages/index.html"
     paginate_by = 10
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['lfp_form'] = LFPForm(user=self.request.user)
+        return context
 
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('account_login')
+
+        form = LFPForm(request.POST, user=request.user)
+        if form.is_valid():
+            userstat = form.save(commit=False)
+            userstat.player = request.user
+            userstat.save()
+            return redirect('/?lfp_success=1')
+        else:
+            return self.get(request, form=form)
 
 class LfgView(TemplateView):
     template_name = "pages/lfg.html"
@@ -63,7 +81,6 @@ def delete_team(request, slug):
     team = get_object_or_404(Sixteam, slug=slug)
 
     if request.user != team.creator:
-        # Forbidden access, but still returns a response
         return HttpResponseForbidden("This is not your team to delete!")
 
     if request.method == 'POST':
@@ -73,5 +90,5 @@ def delete_team(request, slug):
         except Exception:
             return redirect('/my-teams?deleted=0')
 
-    # If it's a GET request, render confirmation page
+    # show confirmation page
     return render(request, 'pages/confirm_delete.html', {'team': team})
