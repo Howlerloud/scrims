@@ -16,4 +16,17 @@
   {% else %}
     <p>You haven't created any teams yet.</p>
   {% endif %}
+  {% if request.GET.deleted %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+      icon: '{% if request.GET.deleted == "1" %}success{% else %}error{% endif %}',
+      title: '{% if request.GET.deleted == "1" %}Team deleted successfully!{% else %}Failed to delete team.{% endif %}',
+      showConfirmButton: false,
+      timer: 2000
+    });
+  });
+</script>
+{% endif %}
 {% endblock %}

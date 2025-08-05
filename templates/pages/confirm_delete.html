@@ -9,4 +9,18 @@
     <button type="submit">Yes, delete</button>
     <a href="{% url 'my_teams' %}">Cancel</a>
   </form>
+
+{% if success is not None %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+      icon: '{% if success %}success{% else %}error{% endif %}',
+      title: '{% if success %}Team deleted successfully!{% else %}Failed to delete team.{% endif %}',
+      showConfirmButton: false,
+      timer: 2000
+    });
+  });
+</script>
+{% endif %}
 {% endblock %}

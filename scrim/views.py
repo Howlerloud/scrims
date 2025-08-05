@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
-from .models import Userstat, Sixteam
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
+from django.http import HttpResponseForbidden
 from .forms import SixteamForm
+from .models import Userstat, Sixteam
 
 
 class UserList(generic.ListView):
@@ -42,7 +44,12 @@ def create_team(request):
             team.creator = request.user  
             team.save()
             success = True
-            return redirect('my_teams')  # redirect to your list of teams
+            team.creator = request.user
+            try:
+                team.save()
+                success = True
+            except IntegrityError:
+                success = False
         else:
             success = False
     else:
@@ -56,10 +63,15 @@ def delete_team(request, slug):
     team = get_object_or_404(Sixteam, slug=slug)
 
     if request.user != team.creator:
-        return HttpResponseForbidden("This is not your team to delete!.") #stops users entering other teams urls and deleting them
+        # Forbidden access, but still returns a response
+        return HttpResponseForbidden("This is not your team to delete!")
 
     if request.method == 'POST':
-        team.delete()
-        return redirect('my_teams')  # redirect to your list of teams
+        try:
+            team.delete()
+            return redirect('/my-teams?deleted=1')
+        except Exception:
+            return redirect('/my-teams?deleted=0')
 
+    # If it's a GET request, render confirmation page
     return render(request, 'pages/confirm_delete.html', {'team': team})
