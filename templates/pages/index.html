@@ -2,20 +2,22 @@
 {% load static %}
 {% block content %}
 <!-- index.html content starts here -->
- {% if user.is_authenticated %}
-  <form method="POST" class="lfp-form">
-    {% csrf_token %}
-    <label for="id_six_team">Your Team:</label>
-    {{ lfp_form.six_team }}
+{% if user.is_authenticated %}
+  <div class="center">
+    <form method="POST" class="lfp-form">
+      {% csrf_token %}
+      <label for="id_six_team">Your Team:</label>
+      {{ lfp_form.six_team }}
 
-    <label for="id_rank">Rank:</label>
-    {{ lfp_form.rank }}
+      <label for="id_rank">Rank:</label>
+      {{ lfp_form.rank }}
 
-    <label for="id_role">Role:</label>
-    {{ lfp_form.role }}
+      <label for="id_role">Role:</label>
+      {{ lfp_form.role }}
 
-    <button type="submit">Post LFP</button>
-  </form>
+      <button type="submit">Post LFP</button>
+    </form>
+  </div>
 {% endif %}
 
 <table class="userstat-table">

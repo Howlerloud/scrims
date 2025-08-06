@@ -75,7 +75,7 @@ class Userstat(models.Model):
         if self.six_team:
             self.team_name = self.six_team.name
         elif not self.team_name:
-            self.team_name = "teamless"
+            self.team_name = "nameless"
 
         if not self.slug:
             self.slug = slugify(self.team_name)

@@ -22,7 +22,11 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  {% if user.is_authenticated %}
+    <p class="user-structure">{{ user }}</p>
+  {% else %}
   <a class="navbar-brand" href="{% url 'home' %}">Scrim master</a>
+  {% endif %}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -48,16 +52,16 @@
     <ul class="navbar-nav ml-auto">
       {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link {% if request.path == logout_url %}active{% endif %}"
+          <a class="user-structure {% if request.path == logout_url %}active{% endif %}"
              href="{% url 'account_logout' %}">Logout</a>
         </li>
       {% else %}
         <li class="nav-item">
-          <a class="nav-link {% if request.path == signup_url %}active{% endif %}"
+          <a class="user-structure {% if request.path == signup_url %}active{% endif %}"
              href="{% url 'account_signup' %}">Register</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == login_url %}active{% endif %}"
+          <a class="user-structure {% if request.path == login_url %}active{% endif %}"
              href="{% url 'account_login' %}">Login</a>
         </li>
       {% endif %}
