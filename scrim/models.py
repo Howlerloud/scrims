@@ -19,6 +19,7 @@ class Sixteam(models.Model):
     ]
     
     name = models.CharField(max_length=100)
+    discord_name = models.CharField(max_length=40)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_teams')
     created_on = models.DateTimeField(auto_now_add=True)
@@ -31,6 +32,10 @@ class Sixteam(models.Model):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def members(self):
+        return [m.user for m in self.memberships.all()]
 
 
 class Userstat(models.Model):
@@ -67,6 +72,7 @@ class Userstat(models.Model):
 
     class Meta:
         ordering = ["created_on"]
+        unique_together = ('player', 'six_team')
 
     def __str__(self):
         return f"Userstat for {self.player.username}"
@@ -84,7 +90,13 @@ class Userstat(models.Model):
 
 
 class TeamMembership(models.Model):
-    team = models.ForeignKey('Sixteam', on_delete=models.CASCADE, related_name="memberships")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="team_memberships")
-    approved = models.BooleanField(default=False)
-    requested_at = models.DateTimeField(auto_now_add=True)
+    team = models.ForeignKey(Sixteam, on_delete=models.CASCADE, related_name='memberships')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_memberships')
+    joined_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('team', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.team.name}"

@@ -1,15 +1,69 @@
-{% extends 'structure.html' %} {% block content %}
+{% extends 'structure.html' %}
 {% load static %}
+{% block content %}
 
 <div class="masthead">
-    <div class="container">
-        <div class="row g-0">
-            <div class="col-md-6 masthead-text">
-                <h1>{{ userstat.team_name }}</h1>
-                <p>{{ userstat.player }} | {{ post.created_on }}</p>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row g-0">
+      <div class="col-md-6 masthead-text">
+        <h1>{{ userstat.team_name }}</h1>
+        <p>{{ userstat.player }} | {{ userstat.created_on }}</p>
+      </div>
     </div>
+  </div>
 </div>
+
+{% if team %}
+  <h2>Team Members</h2>
+  <ul>
+    {% for member in team.memberships.all %}
+      <li>{{ member.user.username }}</li>
+    {% empty %}
+      <li>No members yet.</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if team and team.slug %}
+  {% if user.is_authenticated %}
+    {% if is_member %}
+      <form method="POST" action="{% url 'leave_team' slug=team.slug %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Leave Team</button>
+      </form>
+    {% elif is_full %}
+      <p>This team is full.</p>
+    {% else %}
+      <form method="POST" action="{% url 'join_team' slug=team.slug %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Join Team</button>
+      </form>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% if request.GET.full %}
+<script>
+Swal.fire({ icon: 'error', title: 'This team is full!', timer: 2000, showConfirmButton: false });
+</script>
+{% elif request.GET.already_joined %}
+<script>
+Swal.fire({ icon: 'info', title: 'You are already on this team.', timer: 2000, showConfirmButton: false });
+</script>
+{% elif request.GET.joined %}
+<script>
+Swal.fire({ icon: 'success', title: 'You joined the team!', timer: 2000, showConfirmButton: false });
+</script>
+{% endif %}
+
+{% if request.GET.left %}
+<script>
+Swal.fire({ icon: 'success', title: 'You left the team!', timer: 2000, showConfirmButton: false });
+</script>
+{% elif request.GET.not_member %}
+<script>
+Swal.fire({ icon: 'error', title: 'You are not on this team.', timer: 2000, showConfirmButton: false });
+</script>
+{% endif %}
 
 {% endblock content %}

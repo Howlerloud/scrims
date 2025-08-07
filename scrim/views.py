@@ -4,8 +4,9 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 from .forms import SixteamForm, LFPForm
-from .models import Userstat, Sixteam
+from .models import Userstat, Sixteam, TeamMembership
 
 
 class UserList(generic.ListView):
@@ -44,12 +45,23 @@ class LfgView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         slug = self.kwargs.get('slug')
         userstat = get_object_or_404(Userstat, slug=slug)
+        team = userstat.six_team
+
+        # Check if user is already a member
+        user = self.request.user
+        is_member = False
+        if user.is_authenticated and team:
+            is_member = team.memberships.filter(user=user).exists()
 
         context['userstat'] = userstat
+        context['team'] = team
+        context['is_member'] = is_member
+        context['is_full'] = team.memberships.count() >= 6 if team else False
+
         return context
+
 
 @login_required
 def delete_lfp(request, slug):
@@ -62,7 +74,8 @@ def delete_lfp(request, slug):
         userstat.delete()
         return redirect('/?lfp_deleted=1')
 
-    return redirect('/')  # fallback
+    return redirect('/')
+
 
 @login_required
 def user_teams(request):
@@ -79,9 +92,7 @@ def create_team(request):
         if form.is_valid():
             team = form.save(commit=False)
             team.creator = request.user  
-            team.save()
             success = True
-            team.creator = request.user
             try:
                 team.save()
                 success = True
@@ -111,3 +122,40 @@ def delete_team(request, slug):
 
     # show confirmation page
     return render(request, 'pages/confirm_delete.html', {'team': team})
+
+
+@login_required
+def join_team(request, slug):
+    team = get_object_or_404(Sixteam, slug=slug)
+
+    # Prevent the same user joining twice
+    if TeamMembership.objects.filter(team=team, user=request.user).exists():
+        return redirect(f'/lfg/{slug}?already_joined=1')
+
+    # Block join if team is full
+    if team.memberships.count() >= 6:
+        return redirect(f'/lfg/{slug}?full=1')
+
+    # Add user to the team
+    TeamMembership.objects.create(team=team, user=request.user)
+    return redirect(f'/lfg/{slug}?joined=1')
+
+
+@login_required
+def leave_team(request, slug):
+    team = get_object_or_404(Sixteam, slug=slug)
+    membership = TeamMembership.objects.filter(team=team, user=request.user).first()
+
+    if membership:
+        membership.delete()
+
+        # Remove only one Userstat connected to this team (if exists)
+        userstat = Userstat.objects.filter(player=request.user, six_team=team).first()
+        if userstat:
+            userstat.six_team = None
+            userstat.team_name = "teamless!"
+            userstat.save()
+
+        return redirect(f'/lfg/{slug}?left=1')
+
+    return redirect(f'/lfg/{slug}?not_member=1')
