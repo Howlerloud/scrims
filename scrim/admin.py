@@ -1,21 +1,24 @@
 from django.contrib import admin
-from .models import Sixteam
-from .models import Userstat
+from .models import CreateTeam, LfpModel
 from django_summernote.admin import SummernoteModelAdmin
 
-@admin.register(Sixteam)
-class SixteamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'creator', 'created_on', 'slug')
-    search_fields = ('name', 'creator__username')
-    prepopulated_fields = {'slug': ('name',)}
+
+@admin.register(CreateTeam)
+class CreateTeamAdmin(admin.ModelAdmin):
+    list_display = ('team_name', 'discord_name', 'created_on', 'rank')
+    search_fields = ('team_name', 'creator__username')
+    prepopulated_fields = {'slug': ('team_name',)}
 
 
-@admin.register(Userstat)
-class UserstatAdmin(SummernoteModelAdmin):
+@admin.register(LfpModel)
+class LfpModelAdmin(admin.ModelAdmin):
+    list_display = ('host', 'team', 'get_team_name')
 
-    list_display = ('player', 'role', 'created_on','team_status')
-    search_fields = ['player', 'role']
-    list_filter = ('team_status',)
+    def get_team_name(self, obj):
+        return obj.team.team_name
+    get_team_name.short_description = 'Team Name'
+
+
 
 
 
