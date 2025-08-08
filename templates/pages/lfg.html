@@ -1,69 +1,56 @@
 {% extends 'structure.html' %}
 {% load static %}
 {% block content %}
-
-<div class="masthead">
-  <div class="container">
-    <div class="row g-0">
-      <div class="col-md-6 masthead-text">
-        <h1>{{ userstat.team_name }}</h1>
-        <p>{{ userstat.player }} | {{ userstat.created_on }}</p>
-      </div>
-    </div>
-  </div>
+<div class="center">
+  <h1 class="lfg-title">{{ lfp.team.team_name }}</h1>
+    <h2 class="lfg-title">Team Leader: {{ lfp.host.username }}</h2>
+    <p class="lfg-title">Discord contact: {{ object.team.discord_name }}</p>
 </div>
-
-{% if team %}
-  <h2>Team Members</h2>
-  <ul>
-    {% for member in team.memberships.all %}
-      <li>{{ member.user.username }}</li>
-    {% empty %}
-      <li>No members yet.</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-{% if team and team.slug %}
-  {% if user.is_authenticated %}
-    {% if is_member %}
-      <form method="POST" action="{% url 'leave_team' slug=team.slug %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Leave Team</button>
-      </form>
-    {% elif is_full %}
-      <p>This team is full.</p>
-    {% else %}
-      <form method="POST" action="{% url 'join_team' slug=team.slug %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-success">Join Team</button>
-      </form>
-    {% endif %}
-  {% endif %}
-{% endif %}
-
-{% if request.GET.full %}
-<script>
-Swal.fire({ icon: 'error', title: 'This team is full!', timer: 2000, showConfirmButton: false });
-</script>
-{% elif request.GET.already_joined %}
-<script>
-Swal.fire({ icon: 'info', title: 'You are already on this team.', timer: 2000, showConfirmButton: false });
-</script>
-{% elif request.GET.joined %}
-<script>
-Swal.fire({ icon: 'success', title: 'You joined the team!', timer: 2000, showConfirmButton: false });
-</script>
-{% endif %}
-
-{% if request.GET.left %}
-<script>
-Swal.fire({ icon: 'success', title: 'You left the team!', timer: 2000, showConfirmButton: false });
-</script>
-{% elif request.GET.not_member %}
-<script>
-Swal.fire({ icon: 'error', title: 'You are not on this team.', timer: 2000, showConfirmButton: false });
-</script>
-{% endif %}
-
+<table class="userstat-table">
+    <thead>
+        <tr>
+            <th>Players</th>
+            <th>Ranks</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for slot in lfp.slots.all %}
+    <tr>
+        <td>
+            {% if slot.player %}
+                {{ slot.player.username }}
+            {% else %}
+                <em>Empty Slot</em>
+            {% endif %}
+        </td>
+        <td>{{ lfp.team.rank }}</td>
+        <td>
+            {% if slot.player == user %}
+                <form method="post" action="{% url 'leave_slot' slug=lfp.slug %}">
+                    {% csrf_token %}
+                    <button type="submit">Leave</button>
+                </form>
+            {% elif not user_in_team %}
+            {% if not slot.player %}
+                <form method="post" action="{% url 'join_slot' slug=lfp.slug %}">
+                    {% csrf_token %}
+                    <button type="submit">Join</button>
+                </form>
+            {% endif %}
+            {% else %}
+                <em>You are already a part of this team</em>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+    <div class="center">
+        {% if "placeholder" in lfp.team.team_logo.url %}
+            <img class="team-logo center" src="{% static 'images/default.jpg' %}" alt="default team logo">
+        {% else %}
+            <img class="team-logo center" src="{{ lfp.team.team_logo.url }}" alt="{{ lfp.team.team_name }} logo">
+        {% endif %}
+    </div>
 {% endblock content %}

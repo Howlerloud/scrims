@@ -6,7 +6,7 @@ from .models import CreateTeam, LfpModel
 class CreateNewTeam(forms.ModelForm):
     class Meta:
         model = CreateTeam
-        fields = ['team_name', 'discord_name', 'rank']
+        fields = ['team_name', 'discord_name', 'rank', 'team_logo']
 
 
 class LfpForm(forms.ModelForm):

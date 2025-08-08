@@ -2,11 +2,16 @@
 {% load static %}
 
 {% block content %}
-  <h2>Create a New Team</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create</button>
-  </form>
-
+<div class="center block">
+  <h2 class="center">Create a New Team</h2>
+  <div class="center">
+    <form method="post" enctype="multipart/form-data">  <!-- Important! -->
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="center">
+        <button type="submit">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

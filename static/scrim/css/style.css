@@ -127,3 +127,19 @@ a:hover {
 .navbar-dark .navbar-nav .nav-link:hover {
     color: #ccc !important;
 }
+
+.lfg-title {
+    margin-left: 4rem;
+    margin-right: 4rem;
+    font-size: 2rem;
+    color: #212529;
+}
+
+.block {
+    display: block;
+}
+
+.team-logo {
+    width: 30%
+    height: 30%
+}
