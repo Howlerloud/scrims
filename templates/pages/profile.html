@@ -1,5 +1,41 @@
-{% extends "structure.html" %}
+{% extends 'structure.html' %}
 {% load static %}
 {% block content %}
+
+<h1>Profile</h1>
+<p><strong>Username:</strong> {{ request.user.username }}</p>
+
+<h2>Your Teams</h2>
+
+{% if teams %}
+  <ul class="team-list">
+    {% for team in teams %}
+      <li class="team-item" style="margin-bottom: 1rem;">
+        <div class="team-card">
+          <h3>{{ team.team_name }}</h3>
+          <p>Discord: {{ team.discord_name }}</p>
+          <p>Rank: {{ team.get_rank_display }}</p>
+
+          {# Show uploaded logo or fallback static image #}
+          {% if team.team_logo and team.team_logo.public_id and team.team_logo.public_id != 'placeholder' %}
+            <img class="team-logo" src="{{ team.team_logo.url }}" alt="{{ team.team_name }} logo" style="height:60px;">
+          {% else %}
+            <img class="team-logo" src="{% static 'images/default.jpg' %}" alt="default team logo" style="height:60px;">
+          {% endif %}
+
+          {# Inline delete (no confirm page). Remove this form if you prefer the confirm page below. #}
+            <form method="post"
+                action="{% url 'team_delete' slug=team.slug %}"
+                onsubmit="return confirm('Delete this team?');">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+            </form>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You haven't created any teams yet.</p>
+{% endif %}
 
 {% endblock %}

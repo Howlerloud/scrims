@@ -3,6 +3,7 @@ from django.views.generic import DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.generic import TemplateView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
@@ -58,7 +59,12 @@ class CreateTeamView(CreateView):
     model = CreateTeam
     form_class = CreateNewTeam
     template_name = 'pages/create_team.html'
-    success_url = reverse_lazy('home')  # Redirect after successful form submission
+    success_url = reverse_lazy('profile')  # send the user to their profile after creating a new team
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # set team owner
+        messages.success(self.request, f'Team "{form.instance.team_name}" was successfully created.')
+        return super().form_valid(form)
 
 
 def join_slot(request, slug):
@@ -89,3 +95,35 @@ def leave_slot(request, slug):
     else:
         messages.error(request, "You are not part of this team.")
     return redirect('lfg_detail', slug=slug)
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = "pages/profile.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # show only teams created by the user
+        ctx['teams'] = CreateTeam.objects.filter(owner=self.request.user).order_by('-created_on')
+        return ctx
+
+
+class TeamDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = CreateTeam
+    success_url = reverse_lazy('profile')
+
+    # Ensure only the owner can delete, and lookup by slug
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            CreateTeam.objects.filter(owner=self.request.user),
+            slug=self.kwargs['slug']
+        )
+
+    def test_func(self):
+        return self.get_object().owner == self.request.user
+
+    # <-- add the message here
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        team_name = self.object.team_name
+        messages.success(request, f'Team "{team_name}" was successfully deleted.')
+        return super().post(request, *args, **kwargs)

@@ -11,7 +11,7 @@ urlpatterns = [
     path('lfp/<slug:slug>/delete/', views.LfpDeleteView.as_view(), name='delete_lfp'),
     path('lfp/<slug:slug>/join/', views.join_slot, name='join_slot'),
     path('lfp/<slug:slug>/leave/', views.leave_slot, name='leave_slot'),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('teams/<slug:slug>/delete/', views.TeamDeleteView.as_view(), name='team_delete'),
 ]
-
-# path('admin/', admin.site.urls),
 

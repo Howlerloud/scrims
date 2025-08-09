@@ -4,7 +4,7 @@
 <div class="center">
   <h1 class="lfg-title">{{ lfp.team.team_name }}</h1>
     <h2 class="lfg-title">Team Leader: {{ lfp.host.username }}</h2>
-    <p class="lfg-title">Discord contact: {{ object.team.discord_name }}</p>
+    <p class="lfg-title">Discord contact: {{ lfp.team.discord_name }}</p>
 </div>
 <table class="userstat-table">
     <thead>
@@ -46,11 +46,11 @@
 {% endfor %}
     </tbody>
 </table>
-    <div class="center">
-        {% if "placeholder" in lfp.team.team_logo.url %}
-            <img class="team-logo center" src="{% static 'images/default.jpg' %}" alt="default team logo">
-        {% else %}
-            <img class="team-logo center" src="{{ lfp.team.team_logo.url }}" alt="{{ lfp.team.team_name }} logo">
-        {% endif %}
+<div class="center">
+    {% if lfp.team.team_logo and lfp.team.team_logo.public_id and lfp.team.team_logo.public_id != 'placeholder' %}
+        <img class="team-logo center" src="{{ lfp.team.team_logo.url }}" alt="{{ lfp.team.team_name }} logo">
+    {% else %}
+        <img class="team-logo center" src="{% static 'images/default.jpg' %}" alt="default team logo">
+    {% endif %}
     </div>
 {% endblock content %}

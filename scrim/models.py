@@ -16,6 +16,7 @@ class CreateTeam(models.Model):
         ('eternity', 'Eternity'),
     ]
 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teams')
     created_on = models.DateTimeField(auto_now_add=True)
     team_name = models.CharField(max_length=30, default="No Team!")
     discord_name = models.CharField(max_length=30, default="NA")
@@ -37,11 +38,9 @@ class CreateTeam(models.Model):
                 slug = f"{base_slug}-{count}"
                 count += 1
             self.slug = slug
-
         super().save(*args, **kwargs)
 
     
-
 class LfpModel(models.Model):
     RANK = [
         ('bronze', 'Bronze'),
