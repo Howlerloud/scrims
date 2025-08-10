@@ -26,9 +26,46 @@
 <p>A minimalistic design approach was chosen to allow for quicker navigation and reduce clashing of colours. This gives it a professional but simple feel.</p>
 <h1>Wireframes</h1>
 <hr>
+<p>Desktop Home page Desktop</p>
 <img src="assets/readme/index_pc_wireframe.jpg">
+<p>View Profile and teams page Desktop</p>
 <img src="assets/readme/profile_pc_wireframe.jpg">
+<p>Create a team form Desktop</p>
 <img src="assets/readme/create_team_pc_wireframe.jpg">
+<p>Log in/out Desktop</p>
+<img src="assets/readme/user_pc_wireframe.jpg">
+<p>Desktop Home page Mobile</p>
 <img src="assets/readme/index_mobile_wireframe.jpg">
+<p>View Profile and teams page Mobile</p>
 <img src="assets/readme/profile_mobile_wireframe.jpg">
+<p>Create a team form Mobile</p>
 <img src="assets/readme/create_team_mobile_wireframe.jpg">
+<p>Log in/out Desktop</p>
+<img src="assets/readme/user_mobile_wireframe.jpg">
+<h1>Features</h1>
+<p>The user has the ability to create an account and log-in to the website giving access to the "LFG" page allowing the user to post and join teams.</p>
+<img src="assets/readme/index.jpg">
+<img src="assets/readme/sign_up.jpg">
+<p>View of the lfg from an admin/superuser having access to delete all posts</p>
+<img src="assets/readme/admin_index.jpg">
+<p>This is what the user can see when they click on a lfg post, they have access to the join button which allows them to join the team slot.</p>
+<img src="assets/readme/team_page.jpg">
+<h1>Testing</h1>
+<hr>
+<h2>Manual Testing</h2>
+<hr>
+<ul>
+  <li>All Forms work posting correctly</li>
+  <li>All buttons work and display a related swal message to the user on success.</li>
+  <li>The website has been tested in multiple resolutions allowing for flexability to the user on Pc, phone or tablet.</li>
+  <li>Login and logout feature both work and give a response to the user when done./li>
+  <li>Creating an account works and auto sings the user in once done.</li>
+  <li>Uploading a picture works and if the user chooses not to a default image is applied.</li>
+  <li>All links have reactive css that change colour on hover that works.</li>
+  <li>Links to templates work and display the correct template.</li>
+</ul>
+
+<h1>Credits</h1>
+<ul>
+  <li>https://wireframe.cc/ to buld the wireframes</li>
+</ul>
