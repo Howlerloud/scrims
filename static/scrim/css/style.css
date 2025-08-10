@@ -165,6 +165,10 @@ a:hover {
     text-decoration: underline;
 }
 
+.mobile-table {
+    width: 95%;
+}
+
 /* Profile page styling to align teams and center content */
 .your-team-box {
     display: flex;
@@ -173,12 +177,13 @@ a:hover {
     width: 100%;
 }
 
+
 .your-team {
     border-style: solid;
     border-color: #212529;
     margin: 1rem;
-    width: 25rem;
-    height: 25rem;
+    width: 300px;
+    height: 300px;
     display: inline-block;
 }
 
@@ -190,6 +195,11 @@ a:hover {
 
 .your-team-profile {
     margin: 1rem;
+}
+
+.sign-margin {
+    width: 100%;
+    margin: 0;
 }
 
 @media screen and (max-width: 610px) {
@@ -221,17 +231,4 @@ a:hover {
     padding: 10px 14px;
     text-align: left;
 }
-}
-
-.mobile-table {
-    width: 95%%;
-}
-
-.your-team {
-    border-style: solid;
-    border-color: #212529;
-    margin: 1rem;
-    width: 300px;
-    height: 300px;
-    display: inline-block;
 }

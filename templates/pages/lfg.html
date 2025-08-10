@@ -15,35 +15,38 @@
         </tr>
     </thead>
     <tbody>
-{% for slot in lfp.slots.all %}
-    <tr>
-        <td>
-            {% if slot.player %}
-                {{ slot.player.username }}
-            {% else %}
-                <em>Empty Slot</em>
-            {% endif %}
-        </td>
-        <td>{{ lfp.team.rank }}</td>
-        <td>
-            {% if slot.player == user %}
-                <form method="post" action="{% url 'leave_slot' slug=lfp.slug %}">
-                    {% csrf_token %}
-                    <button type="submit">Leave</button>
-                </form>
-            {% elif not user_in_team %}
-            {% if not slot.player %}
-                <form method="post" action="{% url 'join_slot' slug=lfp.slug %}">
-                    {% csrf_token %}
-                    <button type="submit">Join</button>
-                </form>
-            {% endif %}
-            {% else %}
-                <em>You are already a part of this team</em>
-            {% endif %}
-        </td>
-    </tr>
-{% endfor %}
+        <!-- Loads 6 player slots allowing for 6 users to participate in a team -->
+        {% for slot in lfp.slots.all %}
+            <tr>
+                <td>
+                    {% if slot.player %}
+                        {{ slot.player.username }}
+                    {% else %}
+                        <em>Empty Slot</em>
+                    {% endif %}
+                </td>
+                <td>{{ lfp.team.rank }}</td>
+                <td>
+                    <!-- calls my leave slot function from views removing the player from the team list -->
+                    {% if slot.player == user %}
+                        <form method="post" action="{% url 'leave_slot' slug=lfp.slug %}">
+                            {% csrf_token %}
+                            <button type="submit">Leave</button>
+                        </form>
+                    {% elif not user_in_team %}
+                    <!-- calls my join slot function from views giving the player the ability to choose a slot and disabling the rest once done -->
+                    {% if not slot.player %}
+                        <form method="post" action="{% url 'join_slot' slug=lfp.slug %}">
+                            {% csrf_token %}
+                            <button type="submit">Join</button>
+                        </form>
+                    {% endif %}
+                    {% else %}
+                        <em>You are already a part of this team</em>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 <div class="center">

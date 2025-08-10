@@ -2,7 +2,7 @@
 {% extends "structure.html" %}
 {% load static %}
 {% block content %}
-
+<!-- Loads the Post bar for users that are logged -->
 {% if user.is_authenticated %}
   <div class="center">
     <form method="POST" action="{% url 'post_lfp' %}">
@@ -19,7 +19,7 @@
 {% else %}
   <p class="center">You must be logged in to post a LFP.</p>
 {% endif %}
-
+<!-- This is the main table of my index page displaying all teams currently seeking players -->
 <hr>
 <div class="mobile-table center">
   <table class="userstat-table">
@@ -39,7 +39,7 @@
           <td>{{ lfp.team.team_name }}</td>
           <td>{{ lfp.average_rank }}</td>
           <td>{{ lfp.date_created|date:"M d \\a\\t g:i A" }}</td>
-
+          <!-- loads the unique url for each team that was generated in the model incrementing by 1 -->
           {% if user.is_authenticated %}
             <td>
               <a href="{% url 'lfg_detail' slug=lfp.slug %}">View Team</a>
@@ -62,17 +62,18 @@
       </tbody>
   </table>
 </div>
+<!-- If more than 10 sets of data exist, a next or prev button will allowing the user to load the next set of data -->
 {% if is_paginated %}
-<nav>
-    <ul class="center">
-        {% if page_obj.has_previous %}
-            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; Prev</a></li>
-        {% endif %}
-        {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
-        {% endif %}
-    </ul>
-</nav>
+  <nav>
+      <ul class="center">
+          {% if page_obj.has_previous %}
+              <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; Prev</a></li>
+          {% endif %}
+          {% if page_obj.has_next %}
+              <li><a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
+          {% endif %}
+      </ul>
+  </nav>
 {% endif %}
 
 {% endblock %}

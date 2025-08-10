@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from cloudinary.models import CloudinaryField
 
 
+# This allows the user to crate a team on the CreateTeam page which is used in the lfp post
 class CreateTeam(models.Model):
     RANK = [
         ('bronze', 'Bronze'),
@@ -40,7 +41,8 @@ class CreateTeam(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
-    
+
+# Used when making a team post
 class LfpModel(models.Model):
     RANK = [
         ('bronze', 'Bronze'),
@@ -82,6 +84,7 @@ class LfpModel(models.Model):
                 PlayerSlot.objects.create(lfp=self)
 
 
+# This links to the player slots when joining or leaving a team
 class PlayerSlot(models.Model):
     lfp = models.ForeignKey(LfpModel, on_delete=models.CASCADE, related_name='slots')
     player = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

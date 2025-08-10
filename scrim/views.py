@@ -38,7 +38,7 @@ class CreateLfpView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.host = self.request.user
-        messages.success(self.request, f'LFP "{form.instance.team.team_name}" was successfully created.')
+        messages.success(self.request, f'LFP for "{form.instance.team.team_name}" was successfully created.')
         return super().form_valid(form)
 
 
@@ -49,7 +49,7 @@ class LfpDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('home')
 
     def test_func(self):
-        # superusers can delete anything; otherwise only the host
+        # superusers can delete anything
         return self.request.user.is_superuser or self.get_object().host == self.request.user
 
     def post(self, request, *args, **kwargs):
