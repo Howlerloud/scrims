@@ -1,31 +1,25 @@
-{% url 'home' as home_url %}
-{% url 'about' as about_url %}
-{% url 'account_login' as login_url %}
-{% url 'account_signup' as signup_url %}
-{% url 'account_logout' as logout_url %}
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<meta name="Gaming Scrimmage Signup" content="Enter your description here"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="{% static 'scrim/css/style.css' %}">
-<title>Title</title>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Enter your description here">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'scrim/css/style.css' %}">
+  <title>Scrims Finder</title>
 </head>
+<body class="d-flex flex-column min-vh-100">
 
-<body>
-  <!-- navigation bar for the whole project -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     {% if user.is_authenticated %}
-      <p class="user-structure">{{ user }}</p>
+      <span class="navbar-text mr-3 user-structure">{{ user }}</span>
     {% else %}
       <a class="navbar-brand" href="{% url 'home' %}">Scrim master</a>
     {% endif %}
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -33,16 +27,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'home' %}">Home{% if request.resolver_match.url_name == 'home' %} <span class="sr-only">(current)</span>{% endif %}</a>
         </li>
-
-        <!-- Allows user interaction when they are logged in -->
         {% if user.is_authenticated %}
-          <li class="nav-item">
+          <li class="nav-item {% if request.resolver_match.url_name == 'create_team' %}active{% endif %}">
             <a class="nav-link" href="{% url 'create_team' %}">Create Team</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
             <a class="nav-link" href="{% url 'profile' %}">My Teams</a>
           </li>
         {% endif %}
@@ -50,53 +42,50 @@
 
       <ul class="navbar-nav ml-auto">
         {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="user-structure {% if request.path == logout_url %}active{% endif %}"
-              href="{% url 'account_logout' %}">Logout</a>
+          <li class="nav-item {% if request.resolver_match.url_name == 'account_logout' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
           </li>
         {% else %}
-          <li class="nav-item">
-            <a class="user-structure {% if request.path == signup_url %}active{% endif %}"
-              href="{% url 'account_signup' %}">Register</a>
+          <li class="nav-item {% if request.resolver_match.url_name == 'account_signup' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
           </li>
-          <li class="nav-item">
-            <a class="user-structure {% if request.path == login_url %}active{% endif %}"
-              href="{% url 'account_login' %}">Login</a>
+          <li class="nav-item {% if request.resolver_match.url_name == 'account_login' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
           </li>
         {% endif %}
       </ul>
     </div>
   </nav>
-  <!-- loads my block content from other templates -->
+
   <main class="flex-shrink-0 main-bg">
-    {% block content %}
-    {% endblock content %}
+    {% block content %}{% endblock %}
   </main>
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <footer class="mt-auto py-3 bg-dark text-light text-center">
+    {% block footer %}{% endblock %}
+  </footer>
 
-<!-- To display any of my swal messages that are called -->
-{% if messages %}
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    {% for message in messages %}
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: '{{ message.tags|default:"info" }}'.split(' ')[0],
-      title: "{{ message|escapejs }}",
-      showConfirmButton: false,
-      timer: 2500,
-      timerProgressBar: true
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  {% if messages %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      {% for message in messages %}
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: '{{ message.tags|default:"info" }}'.split(' ')[0],
+        title: "{{ message|escapejs }}",
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true
+      });
+      {% endfor %}
     });
-    {% endfor %}
-  });
-</script>
-{% endif %}
-
+  </script>
+  {% endif %}
 </body>
 </html>
