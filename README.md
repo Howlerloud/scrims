@@ -29,6 +29,8 @@
 <img src="assets/readme/index_pc_wireframe.jpg">
 <img src="assets/readme/profile_pc_wireframe.jpg">
 <img src="assets/readme/create_team_pc_wireframe.jpg">
+<img src="assets/readme/user_pc_wireframe.jpg">
 <img src="assets/readme/index_mobile_wireframe.jpg">
 <img src="assets/readme/profile_mobile_wireframe.jpg">
 <img src="assets/readme/create_team_mobile_wireframe.jpg">
+<img src="assets/readme/user_mobile_wireframe.jpg">
