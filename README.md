@@ -59,7 +59,7 @@
 <ul>
   <li>All Forms work posting correctly</li>
   <li>All buttons work and display a related swal message to the user on success.</li>
-  <li>The website has been tested in multiple resolutions allowing for flexability to the user on Pc, phone or tablet.</li>
+  <li>The website has been tested in multiple resolutions allowing for flexibility to the user on Pc, phone or tablet.</li>
   <li>Login and logout feature both work and give a response to the user when done./li>
   <li>Creating an account works and auto sings the user in once done.</li>
   <li>Uploading a picture works and if the user chooses not to a default image is applied.</li>
@@ -71,7 +71,7 @@
   <li>When selecting a team using the lfp form all users could see every team, this was an issue as I only wanted users too see teams they had created. To fix this I added a unique owner to each team to taget when loading the teams.</li>
   <li>The lfg table was causing the page to be oversized due to the format, changed the location of the <tr> and <td> to stop the table breaking its container.</li>
   <li>Had an issue with the database getting confused with migration and wouldn't allow me to migrate or flush had to load previous commit to allow for a flush before changing variable names to allow for better readability.</li>
-  <li>Had an issue with slugs that were generated for the html overlapping with teams with the same name causing the server to crash. Added a unique slug generater that took the name of the team and added 1 for each team with that name.</li>
+  <li>Had an issue with slugs that were generated for the html overlapping with teams with the same name causing the server to crash. Added a unique slug generator that took the name of the team and added 1 for each team with that name.</li>
 </ul>
 <h2>Automated Testing</h2>
 <p>Automated Testing is the use of external software to check for errors in the code and to highlight them to be addressed.</p>
@@ -126,7 +126,7 @@
 </ol>
 <h1>Credits</h1>
 <ul>
-  <li>https://wireframe.cc/ to buld the wireframes</li>
+  <li>https://wireframe.cc/ to build the wireframes</li>
   <li>Code institute for how to setup the structure of my project, python and javascript</li>
   <li>w3 schools for css and html</li>
   <li>Placeholder image for teams https://www.vhv.rs/dpng/d/493-4934854_hylian-shield-and-master-sword-pixel-art-hd.png</li>
