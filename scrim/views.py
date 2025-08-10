@@ -8,7 +8,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from .models import LfpModel, CreateTeam, PlayerSlot
-from .forms import LfpForm, CreateNewTeam
+from .forms import LfpForm, CreateNewTeam, TeamRankForm
+from django.contrib.auth.decorators import login_required
 
 
 # Shows all LFP posts, New team posts will be displayed at the top
@@ -123,8 +124,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        # show only teams created by the user
         ctx['teams'] = CreateTeam.objects.filter(owner=self.request.user).order_by('-created_on')
+        ctx['rank_choices'] = CreateTeam.RANK  # <-- add this line
         return ctx
 
 
@@ -148,3 +149,16 @@ class TeamDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         team_name = self.object.team_name
         messages.success(request, f'Team {team_name} was successfully deleted.')
         return super().post(request, *args, **kwargs)
+
+
+@login_required
+def update_team_rank(request, slug):
+    team = get_object_or_404(CreateTeam, slug=slug, owner=request.user)
+    if request.method == "POST":
+        form = TeamRankForm(request.POST, instance=team)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Updated rank for "{team.team_name}".')
+        else:
+            messages.error(request, "Invalid rank selection.")
+    return redirect('profile')

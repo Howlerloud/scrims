@@ -14,13 +14,18 @@
             <h3 class="center">{{ team.team_name }}</h3>
             <p class="center">Discord: {{ team.discord_name }}</p>
             <p class="center">Rank: {{ team.get_rank_display }}</p>
-
                 <div class="center">
-                    <form method="post"
-                        action="{% url 'team_delete' slug=team.slug %}"
-                        onsubmit="return confirm('Delete this team?');">
+                    <form method="post" action="{% url 'team_update_rank' slug=team.slug %}">
                     {% csrf_token %}
-                    <button type="submit">Delete</button>
+                    <label for="rank-{{ team.pk }}">Rank</label>
+                    <select id="rank-{{ team.pk }}" name="rank">
+                        {% for value, label in rank_choices %}
+                        <option value="{{ value }}" {% if team.rank == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Update rank</button>
                     </form>
                 </div>
                 <div class="center">

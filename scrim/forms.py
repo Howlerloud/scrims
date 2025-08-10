@@ -21,3 +21,9 @@ class LfpForm(forms.ModelForm):
     class Meta:
         model = LfpModel
         fields = ['team', 'average_rank']
+
+
+class TeamRankForm(forms.ModelForm):
+    class Meta:
+        model = CreateTeam
+        fields = ['rank']

@@ -79,7 +79,7 @@ class LfpModel(models.Model):
 
         # Create 6 empty player slots only for new LfpModel objects
         if creating:
-            from .models import PlayerSlot  # Avoid circular imports
+            from .models import PlayerSlot  # Avoid circular imports, this stops my project looping if 2 requests
             for _ in range(6):
                 PlayerSlot.objects.create(lfp=self)
 
