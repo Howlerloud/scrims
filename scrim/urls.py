@@ -14,4 +14,3 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('teams/<slug:slug>/delete/', views.TeamDeleteView.as_view(), name='team_delete'),
 ]
-

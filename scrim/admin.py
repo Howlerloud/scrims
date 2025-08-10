@@ -16,8 +16,3 @@ class LfpModelAdmin(admin.ModelAdmin):
     def get_team_name(self, obj):
         return obj.team.team_name
     get_team_name.short_description = 'Team Name'
-
-
-
-
-
