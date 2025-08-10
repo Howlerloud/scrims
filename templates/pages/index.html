@@ -43,12 +43,12 @@
           {% if user.is_authenticated %}
             <td>
               <a href="{% url 'lfg_detail' slug=lfp.slug %}">View Team</a>
-              {% if user == lfp.host %}
-                <form method="post" action="{% url 'delete_lfp' slug=lfp.slug %}" style="display:inline;">
-                  {% csrf_token %}
-                  <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
-                </form>
-              {% endif %}
+                {% if user == lfp.host or user.is_superuser %}
+                  <form method="post" action="{% url 'delete_lfp' slug=lfp.slug %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
+                  </form>
+                {% endif %}
             </td>
           {% else %}
             <td>

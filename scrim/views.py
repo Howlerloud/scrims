@@ -48,8 +48,9 @@ class LfpDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = "pages/confirm_delete.html"
     success_url = reverse_lazy('home')
 
-    def test_func(self,):
-        return self.get_object().host == self.request.user
+    def test_func(self):
+        # superusers can delete anything; otherwise only the host
+        return self.request.user.is_superuser or self.get_object().host == self.request.user
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
