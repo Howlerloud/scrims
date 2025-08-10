@@ -1,5 +1,6 @@
 <h1>Scrims</h1>
 <p>Scrims is a user orientate website allows people who wish to play a game competitavly, but struggle to find motivated groups with the same mindset</p>
+<img src="assets/readme/index.jpg">
 <h1>Project Goals and User Experience</h1>
 <h2>Project Goals</h2>
 <hr>
