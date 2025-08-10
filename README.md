@@ -45,7 +45,7 @@
 <h1>Features</h1>
 <p>The user has the ability to create an account and log-in to the website giving access to the "LFG" page allowing the user to post and join teams.</p>
 <img src="assets/readme/index.jpg">
-<img src="assets/readme/sign_up.jpg">
+<img src="assets/readme/sing_up.jpg">
 <p>View of the lfg from an admin/superuser having access to delete all posts</p>
 <img src="assets/readme/admin_index.jpg">
 <p>This is what the user can see when they click on a lfg post, they have access to the join button which allows them to join the team slot.</p>
