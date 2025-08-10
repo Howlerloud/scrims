@@ -11,38 +11,54 @@ from .models import LfpModel, CreateTeam, PlayerSlot
 from .forms import LfpForm, CreateNewTeam
 
 
+# Shows all LFP posts, New team posts will be displayed at the top
 class LfpView(generic.ListView):
     model = LfpModel
     template_name = "pages/index.html"
     context_object_name = 'lfps'
     paginate_by = 10
-    queryset = LfpModel.objects.all().order_by('-date_created')  # Order by newest first
+    queryset = LfpModel.objects.all().order_by('-date_created')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['lfp_form'] = LfpForm()  # manually add the form
+        context['lfp_form'] = LfpForm(user=self.request.user)
         return context
-    
 
+
+# Lets a logged-in user create an LFP post
 class CreateLfpView(LoginRequiredMixin, CreateView):
     model = LfpModel
     form_class = LfpForm
     success_url = reverse_lazy('home')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.host = self.request.user
+        messages.success(self.request, f'LFP "{form.instance.team.team_name}" was successfully created.')
         return super().form_valid(form)
 
 
+# Lets a user delete their own LFP post
 class LfpDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = LfpModel
     template_name = "pages/confirm_delete.html"
     success_url = reverse_lazy('home')
 
-    def test_func(self):
+    def test_func(self,):
         return self.get_object().host == self.request.user
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        team_name = self.object.team.team_name
+        messages.success(request, f'LFP for "{team_name}" was successfully deleted.')
+        return super().post(request, *args, **kwargs)
 
+
+# Shows the detail page for a specific LFP
 class LfpDetailView(DetailView):
     model = LfpModel
     template_name = "pages/lfg.html"
@@ -55,6 +71,7 @@ class LfpDetailView(DetailView):
         return context
 
 
+# Lets a user create a new team
 class CreateTeamView(CreateView):
     model = CreateTeam
     form_class = CreateNewTeam
@@ -67,6 +84,7 @@ class CreateTeamView(CreateView):
         return super().form_valid(form)
 
 
+# User joins a free slot in a team
 def join_slot(request, slug):
     lfp = get_object_or_404(LfpModel, slug=slug)
 
@@ -85,6 +103,7 @@ def join_slot(request, slug):
     return redirect('lfg_detail', slug=slug)
 
 
+# User leaves a team they're in
 def leave_slot(request, slug):
     lfp = get_object_or_404(LfpModel, slug=slug)
     slot = PlayerSlot.objects.filter(lfp=lfp, player=request.user).first()
@@ -97,6 +116,7 @@ def leave_slot(request, slug):
     return redirect('lfg_detail', slug=slug)
 
 
+# Profile page that shows only the teams this user owns
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = "pages/profile.html"
 
@@ -107,6 +127,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         return ctx
 
 
+# Lets a user delete a team they own
 class TeamDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = CreateTeam
     success_url = reverse_lazy('profile')
@@ -121,9 +142,8 @@ class TeamDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.get_object().owner == self.request.user
 
-    # <-- add the message here
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         team_name = self.object.team_name
-        messages.success(request, f'Team "{team_name}" was successfully deleted.')
+        messages.success(request, f'Team {team_name} was successfully deleted.')
         return super().post(request, *args, **kwargs)

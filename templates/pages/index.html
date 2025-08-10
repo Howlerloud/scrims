@@ -3,14 +3,6 @@
 {% load static %}
 {% block content %}
 
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
 {% if user.is_authenticated %}
   <div class="center">
     <form method="POST" action="{% url 'post_lfp' %}">
@@ -29,49 +21,50 @@
 {% endif %}
 
 <hr>
+<div class="mobile-table center">
+  <table class="userstat-table">
+      <thead>
+          <tr>
+              <th>Host</th>
+              <th>Team</th>
+              <th>Rank</th>
+              <th>Date</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+      {% for lfp in lfps %}
+        <tr>
+          <td>{{ lfp.host.username }}</td>
+          <td>{{ lfp.team.team_name }}</td>
+          <td>{{ lfp.average_rank }}</td>
+          <td>{{ lfp.date_created|date:"M d \\a\\t g:i A" }}</td>
 
-<table class="userstat-table">
-    <thead>
-        <tr>
-            <th>Host</th>
-            <th>Team</th>
-            <th>Rank</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for lfp in lfps %}
-        <tr>
-            <td>{{ lfp.host.username }}</td>
-            <td>{{ lfp.team.team_name }}</td>
-            <td>{{ lfp.average_rank }}</td>
-            <td>{{ lfp.date_created|date:"M d \\a\\t g:i A" }}</td>
-            {% if user.is_authenticated %}
-            <td><a href="{% url 'lfg_detail' slug=lfp.slug %}">View Team</a>
-                  {% if user == lfp.host %}
-                    <form method="post" action="{% url 'delete_lfp' slug=lfp.slug %}">
-                      {% csrf_token %}
-                      <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
-                    </form>
-                  {% endif %} 
-                  {% else %} 
-                    <td>
-                      <a {% if request.path == login_url %}active{% endif %}"
-                        href="{% url 'account_login' %}">Login to view the match</a>
-                    </td>
+          {% if user.is_authenticated %}
+            <td>
+              <a href="{% url 'lfg_detail' slug=lfp.slug %}">View Team</a>
+              {% if user == lfp.host %}
+                <form method="post" action="{% url 'delete_lfp' slug=lfp.slug %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
+                </form>
               {% endif %}
             </td>
+          {% else %}
+            <td>
+              <a href="{% url 'account_login' %}">Login to view the match</a>
+            </td>
+          {% endif %}
         </tr>
-    {% empty %}
-        <tr><td colspan="4">No LFP posts yet.</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
-
+      {% empty %}
+          <tr><td colspan="4">No LFP posts yet.</td></tr>
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
 {% if is_paginated %}
 <nav>
-    <ul class="pagination">
+    <ul class="center">
         {% if page_obj.has_previous %}
             <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; Prev</a></li>
         {% endif %}

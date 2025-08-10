@@ -13,8 +13,10 @@ class LfpForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        if user:
-            self.fields['team'].queryset = CreateTeam.objects.filter(owner=user)  # Add owner field first
+        # Start with no teams by default
+        self.fields['team'].queryset = CreateTeam.objects.none()
+        if user and user.is_authenticated:
+            self.fields['team'].queryset = CreateTeam.objects.filter(owner=user).order_by('team_name')
 
     class Meta:
         model = LfpModel
